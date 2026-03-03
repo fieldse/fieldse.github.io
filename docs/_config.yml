@@ -20,7 +20,9 @@ menu:
   - title: Home
     url: /
   - title: About
-    url: /about/
+    url: /contact/
+  - title: About
+    url: /contact/
 
 paginate: 10
 paginate_path: /:num/
