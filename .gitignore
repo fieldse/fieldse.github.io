@@ -1,0 +1,14 @@
+# Jekyll
+_site/
+.jekyll-cache/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+
+# Environment
+.env
+.env.local
+.env.*.local

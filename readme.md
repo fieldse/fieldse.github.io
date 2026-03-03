@@ -1,14 +1,10 @@
-# Jekyll static site on GitHub pages
+# Static Site Blog
 
-Ultra-fast popup static site with Jekyll deployed on GitHub pages.
+A minimal Jekyll blog deployed on GitHub Pages. Add Markdown files to the `_posts` directory and it's live.
 
-## How it works
+## Tech Stack
 
-## Installation
-
-TODO
-
-## Configuration
-
-## Credit
+- **Jekyll** — Static site generator
+- **GitHub Pages** — Hosting
+- **Markdown** — Content format
 
