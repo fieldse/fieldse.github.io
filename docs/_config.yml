@@ -4,5 +4,28 @@ plugins:
  - jekyll-remote-theme
 
 title: Matt Fields
+lang: en
 baseurl: ""
 url: "https://mattfields.dev"
+tagline: Secure Software Development
+
+
+author:
+  name: Matt Fields
+  email: hello@mattfields.dev
+  social:
+    github: fieldse
+
+menu:
+  - title: Home
+    url: /
+  - title: About
+    url: /about/
+
+paginate: 10
+paginate_path: /:num/
+
+plugins: 
+  - jekyll-feed
+  - jekyll-paginate
+  - jekyll-sitemap
