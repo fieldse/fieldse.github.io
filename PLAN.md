@@ -1,7 +1,7 @@
 # GitHub Pages Blog Setup
 
 ## Local Files
-- [ ] Create `_config.yml` with Hydejack v9 theme
+- [x] Create `_config.yml` with Hydejack v9 theme
 - [ ] Create `_posts/2026-03-03-hello-world.md` with frontmatter
 - [ ] (Optional) Create `CNAME` with your custom domain
 
