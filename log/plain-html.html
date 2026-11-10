@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building this site in plain HTML · dev@straya</title>
+<meta name="description" content="Why this site is hand-written HTML with no build step, and how the terminal readout works without a framework.">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/readout.js" defer></script>
+<script src="../js/switcher.js" defer></script>
+<script src="../js/content.js" defer></script>
+<script src="../js/term-screen.js" defer></script>
+<script src="../js/term-fs.js" defer></script>
+<script src="../js/term-commands.js" defer></script>
+<script src="../js/term-editor.js" defer></script>
+<script src="../js/terminal.js" defer></script>
+</head>
+<body>
+<div class="wrap post-page">
+  <main class="main">
+    <nav>
+      <a href="../index.html">[~] home</a><a href="../index.html#projects">[1] projects</a><a href="../index.html#log">[2] log</a><a href="../index.html#about">[3] about</a>
+    </nav>
+
+    <article class="post">
+      <header class="post-head">
+        <h1>Building this site in plain HTML</h1>
+        <p class="post-meta dim"><time datetime="2026-11-10">2026-11-10</time></p>
+      </header>
+
+      <p>This site is one HTML page per post, one stylesheet and a few small
+      scripts. There is no framework, no bundler and no build step. Opening
+      <code>index.html</code> in a browser is the whole dev setup.</p>
+
+      <h2>Why plain</h2>
+      <ul>
+        <li>Nothing to upgrade. A static page from 2006 still renders today.</li>
+        <li>Nothing to break. No dependency tree means no surprise in it.</li>
+        <li>Fast. The whole site is smaller than most framework runtimes.</li>
+      </ul>
+
+      <h2>The terminal</h2>
+      <p>The readout on the right is a <code>&lt;dl&gt;</code> in the HTML. With
+      scripts off, that list is what you see. With scripts on, a small script
+      hides it and replays it as a terminal session, one field at a time.</p>
+
+<pre><code>&lt;dl&gt;
+  &lt;dt&gt;stack&lt;/dt&gt;&lt;dd&gt;go · python · typescript · bash&lt;/dd&gt;
+&lt;/dl&gt;
+</code></pre>
+
+      <p>Every command reads from the page itself. On the home page,
+      <code>ls log</code> lists the log entries in the HTML, and
+      <code>cat about.md</code> prints the bio paragraph. The data lives in one place.</p>
+
+      <blockquote>Type <code>help</code> in the terminal to see what else it does.</blockquote>
+    </article>
+
+    <p class="post-foot"><a href="../index.html#log">cd ..</a></p>
+
+    <hr>
+    <p class="dim foot">no tracking, no cookies · <a href="#">rss</a></p>
+  </main>
+
+  <!-- Bio text for the terminal's `cat about.md`. The visible bio is on the home page. -->
+  <div id="about" hidden>
+    <p>Software developer. Writes mostly Go, Python and Bash. Likes boring
+    technology, small dependencies and things that still work in five years.</p>
+  </div>
+
+  <aside class="ro-col">
+    <section class="readout" aria-label="System status">
+      <p class="readout-host">dev@straya.local</p>
+      <dl>
+        <dt>id</dt><dd>matt</dd>
+        <dt>groups</dt><dd>security-engineer · developer · appsec</dd>
+        <dt>loc</dt><dd>-27.47, 153.03</dd>
+        <dt>time</dt><dd data-clock></dd>
+        <dt>stack</dt><dd>go · python · typescript · bash</dd>
+        <dt>containers</dt><dd>❤️</dd>
+        <dt>tasks</dt><dd>ai-wrangling · hardware-hacking · threat-research · malware-hunting · homelab</dd>
+        <dt>build</dt><dd>2026-11-09</dd>
+        <dt>mode</dt><dd data-mode></dd>
+      </dl>
+    </section>
+  </aside>
+</div>
+
+<div class="sw" hidden>
+  <button class="sw-btn" type="button" aria-label="Accent color" aria-haspopup="true" aria-expanded="false"></button>
+  <div class="sw-menu" role="group" aria-label="Accent colors" hidden>
+    <button class="sw-opt" type="button" aria-label="Ice" data-accent="#6df3ff"></button>
+    <button class="sw-opt" type="button" aria-label="Cyan" data-accent="#00e5ff"></button>
+    <button class="sw-opt" type="button" aria-label="Teal" data-accent="#00f5c4"></button>
+    <button class="sw-opt" type="button" aria-label="Deep teal" data-accent="#00d4b4"></button>
+    <button class="sw-opt" type="button" aria-label="Yellow" data-accent="#e0af68"></button>
+    <button class="sw-opt" type="button" aria-label="Neon yellow" data-accent="#ffe600"></button>
+    <button class="sw-opt" type="button" aria-label="Gold" data-accent="#ffc933"></button>
+    <button class="sw-opt" type="button" aria-label="Yellow and cyan" data-accent="#ffe600" data-under="#00e5ff"></button>
+    <button class="sw-opt" type="button" aria-label="Cyan and yellow" data-accent="#00e5ff" data-under="#ffe600"></button>
+  </div>
+</div>
+</body>
+</html>
