@@ -36,7 +36,10 @@ A personal developer page: bio, projects and a dated log, in a minimal terminal 
 
 ## Run it locally
 
-Open `index.html` in a browser. Nothing needs serving.
+Serve the repo root with a static web server, then open `http://localhost:8000/`.
+
+- **Links:** pages link with clean paths such as `/projects/` and `/log/plain-html`, so opening the files directly won't follow them.
+- **Post links:** the server needs to answer `/log/plain-html` with `log/plain-html.html`, as GitHub Pages does.
 
 ## Editing content
 
