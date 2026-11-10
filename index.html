@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dev@straya</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="js/readout.js" defer></script>
+<script src="js/switcher.js" defer></script>
+<script src="js/terminal.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <main class="main">
+    <nav>
+      <a href="#projects">[1] projects</a><a href="#log">[2] log</a><a href="#about">[3] about</a>
+    </nav>
+
+    <h2 id="projects">[1] Projects</h2>
+    <ul>
+      <li><a href="#">toolbox</a> <span class="dim">CLI helpers</span></li>
+      <li><a href="#">homelab</a> <span class="dim">notes and configs for my network</span></li>
+      <li><a href="#">scanner</a> <span class="dim">repo triage before cloning</span></li>
+    </ul>
+
+    <h2 id="log">[2] Log</h2>
+    <ul>
+      <li><span class="dim">2026-11-02</span><a href="#">Switching a site to plain HTML</a></li>
+      <li><span class="dim">2026-10-21</span><a href="#">Notes on a default-deny egress proxy</a></li>
+      <li><span class="dim">2026-10-03</span><a href="#">Why I stopped installing Node on my laptop</a></li>
+    </ul>
+
+    <hr>
+    <p class="dim foot">no tracking, no cookies · <a href="#">rss</a></p>
+  </main>
+
+  <aside class="side" id="about">
+    <h2>[0] About</h2>
+    <img class="portrait" src="img/portrait.png" alt="Portrait" width="150">
+    <h1>Matt</h1>
+    <p>Software developer. Writes mostly Go, Python and Bash. Likes boring
+    technology, small dependencies and things that still work in five years.</p>
+    <p><a href="#">github</a> · <a href="mailto:hello@mattfields.dev">email</a></p>
+  </aside>
+
+  <aside class="ro-col">
+    <section class="readout" aria-label="System status">
+      <p class="readout-host">dev@straya.local</p>
+      <dl>
+        <dt>id</dt><dd>matt</dd>
+        <dt>groups</dt><dd>security-engineer · developer · appsec</dd>
+        <dt>loc</dt><dd>-27.47, 153.03</dd>
+        <dt>time</dt><dd data-clock></dd>
+        <dt>stack</dt><dd>go · python · typescript · bash</dd>
+        <dt>containers</dt><dd>❤️</dd>
+        <dt>tasks</dt><dd>ai-wrangling · hardware-hacking · threat-research · malware-hunting · homelab</dd>
+        <dt>build</dt><dd>2026-11-09</dd>
+        <dt>last log</dt><dd data-last></dd>
+        <dt>mode</dt><dd data-mode></dd>
+      </dl>
+    </section>
+  </aside>
+</div>
+
+<div class="sw" hidden>
+  <button class="sw-btn" type="button" aria-label="Accent color" aria-haspopup="true" aria-expanded="false"></button>
+  <div class="sw-menu" role="group" aria-label="Accent colors" hidden>
+    <button class="sw-opt" type="button" aria-label="Ice" data-accent="#6df3ff"></button>
+    <button class="sw-opt" type="button" aria-label="Cyan" data-accent="#00e5ff"></button>
+    <button class="sw-opt" type="button" aria-label="Teal" data-accent="#00f5c4"></button>
+    <button class="sw-opt" type="button" aria-label="Deep teal" data-accent="#00d4b4"></button>
+    <button class="sw-opt" type="button" aria-label="Yellow" data-accent="#e0af68"></button>
+    <button class="sw-opt" type="button" aria-label="Neon yellow" data-accent="#ffe600"></button>
+    <button class="sw-opt" type="button" aria-label="Gold" data-accent="#ffc933"></button>
+    <button class="sw-opt" type="button" aria-label="Yellow and cyan" data-accent="#ffe600" data-under="#00e5ff"></button>
+    <button class="sw-opt" type="button" aria-label="Cyan and yellow" data-accent="#00e5ff" data-under="#ffe600"></button>
+  </div>
+</div>
+</body>
+</html>

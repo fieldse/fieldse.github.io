@@ -1,0 +1,116 @@
+:root {
+  --bg: #1a1b26; --fg: #c0caf5; --dim: #565f89; --line: #3b4261;
+  --accent: #6df3ff; --under: var(--accent);
+  --glow: color-mix(in srgb, var(--accent) 65%, transparent);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Layout: content | bio | readout on wide screens, readout under the bio below 1300px, stacked on phones */
+.wrap {
+  display: grid; grid-template-columns: 1fr 300px 505px; grid-template-areas: "main bio ro";
+  max-width: 1555px; margin: 0 auto; min-height: 100vh;
+}
+.main { grid-area: main; padding: 2rem 2rem 4rem 1.25rem; }
+.side { grid-area: bio; padding: 2rem 1.25rem 4rem 2rem; border-left: 1px solid var(--line); }
+.ro-col { grid-area: ro; padding: 2.9rem 0 2rem; }
+@media (max-width: 1300px) {
+  .wrap { grid-template-columns: 1fr 300px; grid-template-areas: "main bio" "main ro"; grid-template-rows: auto 1fr; max-width: 1000px; }
+  .side { padding-bottom: 1.5rem; }
+  .ro-col { padding: 0 1rem 4rem 2rem; border-left: 1px solid var(--line); }
+  .readout { margin-left: 0; width: auto; }
+}
+@media (max-width: 760px) {
+  .wrap { grid-template-columns: 1fr; grid-template-areas: "bio" "ro" "main"; grid-template-rows: auto; }
+  .side { border-left: 0; padding: 1.5rem 1.25rem 1rem; }
+  .ro-col { border-left: 0; border-bottom: 1px solid var(--line); padding: 0 1.25rem 1.5rem; }
+  .main { padding: 1.5rem 1.25rem 4rem; }
+}
+
+/* Text and links */
+a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--under); text-underline-offset: 3px; }
+a:hover { color: var(--under); }
+.main ul a { text-decoration: none; }
+.side a, .foot a { position: relative; text-decoration: none; }
+.side a::after, .foot a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 1px; height: 1px;
+  background: var(--under); box-shadow: 0 0 4px 1px var(--glow), 0 0 10px var(--glow);
+}
+.dim { color: var(--dim); }
+h1 { font-size: 1.2rem; margin: .75rem 0 .25rem; }
+h2 {
+  font-size: .8rem; margin: 2rem 0 .75rem; color: var(--accent);
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.side h2 { margin-top: 0; }
+nav { font-size: .85rem; letter-spacing: .02em; }
+nav a {
+  text-decoration: none; margin-right: 1.25rem; color: var(--accent); font-weight: 600;
+  text-transform: uppercase;
+}
+nav a:hover { text-decoration: underline; color: var(--accent); }
+ul { list-style: none; padding: 0; margin: 0; }
+li { margin: .3rem 0; display: flex; gap: 1rem; }
+li .dim { flex: none; }
+.portrait { display: block; width: 150px; height: auto; margin: .5rem 0 0; }
+hr { border: 0; border-top: 1px dashed var(--line); margin: 2.5rem 0 1rem; }
+.foot { font-size: .85rem; }
+
+/* Status readout */
+.readout {
+  margin: 0 0 0 63px; width: 440px; padding: 1rem 1.2rem; border: 1px solid var(--line); border-radius: 8px;
+  font-size: .82rem; line-height: 1.75;
+}
+.readout-host { margin: 0 0 .35rem; color: var(--accent); font-weight: 600; }
+.readout dl { display: grid; grid-template-columns: max-content 1fr; gap: 0 1rem; margin: 0; }
+.readout dt { color: var(--dim); }
+.readout dd { margin: 0; }
+
+/* Terminal mode, added by js/terminal.js. The list stays for screen readers. */
+.readout.is-term > .readout-host, .readout.is-term > dl {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+/* No manual scrolling. The script keeps the view pinned to the newest line. */
+.term { height: calc(13 * 1.75em); overflow: hidden; cursor: text; }
+.readout.is-term { position: relative; }
+/* Long values wrap with a hanging indent so continuation lines stay in the value column. */
+.term-row { white-space: pre-wrap; padding-left: 12ch; text-indent: -12ch; min-height: 1.75em; }
+.term-prompt { color: var(--accent); font-weight: 600; }
+/* Block cursor over the character at the caret. Blinking swaps the block off, leaving the character visible. */
+.term-cursor { background: var(--accent); color: var(--bg); animation: blink 1.06s step-end infinite; }
+@keyframes blink { 50% { background: transparent; color: var(--fg); } }
+.term { position: relative; }
+/* Online counter, fixed in the top-right corner just left of the color dot. */
+.term-bar { position: fixed; top: .85rem; right: 2.6rem; z-index: 10; font-size: .75rem; line-height: 1; }
+.term-row.plain { padding-left: 0; text-indent: 0; }
+.term-dim { color: var(--dim); }
+.readout:focus-within { border-color: var(--accent); }
+/* Real input for keyboards and screen readers, kept invisible. 16px stops iOS zooming on focus. */
+.term-input {
+  position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; padding: 0; border: 0;
+  opacity: 0; font-size: 16px; pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) { .term-cursor { animation: none; } }
+
+/* Accent color switcher */
+.sw { position: fixed; top: 1rem; right: 1rem; z-index: 10; }
+.sw-btn, .sw-opt {
+  position: relative; display: block; padding: 0; border: 0; border-radius: 50%;
+  cursor: pointer; background: linear-gradient(135deg, var(--c) 50%, var(--c2, var(--c)) 50%);
+  box-shadow: 0 0 6px var(--c);
+}
+.sw-btn::after, .sw-opt::after { content: ""; position: absolute; inset: -6px; }
+.sw-btn { width: 8px; height: 8px; box-shadow: 0 0 4px var(--c); outline: 1px solid var(--line); outline-offset: 3px; }
+.sw-opt { width: 10px; height: 10px; }
+.sw-menu {
+  position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; gap: 11px; padding: 10px 9px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 14px;
+}
+.sw-menu[hidden], .sw[hidden] { display: none; }
+.sw-opt:hover { transform: scale(1.25); }
+.sw-opt[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--fg), 0 0 8px var(--c); }
+.sw button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
