@@ -30,7 +30,7 @@
     });
   }
 
-  // opts: screen, history, names (completable commands), isBusy, submit(line).
+  // opts: screen, history, names (completable commands), paths(cmd, word) (completable paths), isBusy, submit(line).
   Term.createEditor = function (opts) {
     var screen = opts.screen;
     var history = opts.history;
@@ -48,18 +48,28 @@
     // Native caret moves (arrows, Home, End, Backspace) land after the keydown, so redraw on the next tick.
     function renderLater() { setTimeout(render, 0); }
 
-    // Completes a command name. Returns false on an empty line, so Tab still moves focus for keyboard users.
+    // Completes the last word: a command name first, a path after it. A finished folder keeps its "/" with no space.
+    // Returns false on an empty line, so Tab still moves focus for keyboard users.
     function complete() {
       var v = input.value;
       if (!v) return false;
-      if (/\s/.test(v)) return true;
-      var names = opts.names().filter(function (n) { return n.indexOf(v) === 0; });
-      if (names.length === 1) {
-        setInput(names[0] + " ");
-      } else if (names.length > 1) {
-        var common = longestPrefix(names);
-        if (common.length > v.length) setInput(common);
-        else if (!opts.isBusy()) { screen.echo(v); screen.printLine(names.join("  ")); }
+      var start = v.search(/\S*$/);
+      var head = v.slice(0, start);
+      var word = v.slice(start);
+      var cmd = head.trim().split(/\s+/)[0];
+      var hits = cmd
+        ? opts.paths(cmd, word)
+        : opts.names().filter(function (n) { return n.indexOf(word) === 0; });
+      if (hits.length === 1) {
+        setInput(head + hits[0] + (hits[0].slice(-1) === "/" ? "" : " "));
+      } else if (hits.length > 1) {
+        var common = longestPrefix(hits);
+        var dir = word.slice(0, word.lastIndexOf("/") + 1);
+        if (common.length > word.length) setInput(head + common);
+        else if (!opts.isBusy()) {
+          screen.echo(v);
+          screen.printLine({ words: hits.map(function (h) { return h.slice(dir.length); }) });
+        }
       }
       return true;
     }

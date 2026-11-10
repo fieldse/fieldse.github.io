@@ -1,5 +1,6 @@
 // The terminal's screen: builds its elements and owns every write to them, plus output pacing.
 // All text goes in through textContent, so typed input can never become markup.
+// The one element besides text is a link row, built with createElement and limited to http and https URLs.
 (function (Term) {
   var LABEL_WIDTH = 12;
   var MAX_LINES = 300;
@@ -25,7 +26,9 @@
     var before = el("span");
     var cursor = el("span", "term-cursor", BLANK);
     var after = el("span");
-    line.append(el("span", "term-prompt", opts.prompt), before, cursor, after);
+    var prompt = opts.prompt;
+    var promptEl = el("span", "term-prompt", prompt);
+    line.append(promptEl, before, cursor, after);
     var input = el("input", "term-input");
     input.type = "text";
     input.maxLength = 200;
@@ -71,9 +74,37 @@
       return node;
     }
 
+    // A {text, link} item is one line: the text, then the link, or plain text when the URL isn't absolute http or https.
+    function linkRow(text, url) {
+      var r = el("div", "term-row plain", text);
+      var protocol = "";
+      try { protocol = new URL(url).protocol; } catch (e) { /* relative or malformed: stays plain text */ }
+      if (protocol !== "http:" && protocol !== "https:") {
+        r.append(url);
+        return r;
+      }
+      var a = el("a", "term-link", url);
+      a.href = url;
+      a.rel = "noopener noreferrer";
+      r.appendChild(a);
+      return r;
+    }
+
+    // A {words} item is one line of names that wraps only between names, never at a hyphen inside one.
+    function wordsRow(words) {
+      var r = el("div", "term-row plain");
+      words.forEach(function (w, i) {
+        if (i) r.append("  ");
+        r.appendChild(el("span", "term-word", w));
+      });
+      return r;
+    }
+
     // A string is one plain line. A {label, value, dim} item is two columns, wrapping under the value.
     function row(item) {
       if (typeof item === "string") return el("div", "term-row plain", item);
+      if (item.link != null) return linkRow(item.text || "", item.link);
+      if (item.words) return wordsRow(item.words);
       var r = el("div", "term-row", pad(item.label));
       if (item.value) r.appendChild(el("span", item.dim ? "term-dim" : "", item.value));
       return r;
@@ -114,7 +145,7 @@
       // A command as the visitor typed it, after the prompt.
       echo: function (cmd) {
         var r = el("div", "term-row plain");
-        r.append(el("span", "term-prompt", opts.prompt), document.createTextNode(cmd));
+        r.append(el("span", "term-prompt", prompt), document.createTextNode(cmd));
         print(r);
       },
 
@@ -170,6 +201,15 @@
       },
 
       showPrompt: function (show) { line.hidden = !show; },
+
+      // New text for the prompt line and later echoes. Lines already printed keep theirs.
+      setPrompt: function (text) {
+        prompt = text;
+        promptEl.textContent = text;
+      },
+
+      // Focuses the hidden input without scrolling the page.
+      focus: focus,
 
       // Screen readers start reading new output from here on.
       announce: function () { out.setAttribute("aria-live", "polite"); },

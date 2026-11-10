@@ -19,13 +19,14 @@
 <div class="wrap post-page">
   <main class="main">
     <nav>
-      <a href="../index.html">[~] home</a><a href="../index.html#projects">[1] projects</a><a href="../index.html#log">[2] log</a><a href="../index.html#about">[3] about</a>
+      <a href="../index.html">[0] home</a><a href="../projects/index.html">[1] projects</a><a href="index.html" aria-current="page">[2] log</a><a href="../about/index.html">[3] about</a><a href="#shell" class="nav-shell">&gt; shell</a>
     </nav>
 
     <article class="post">
       <header class="post-head">
         <h1>Building this site in plain HTML</h1>
         <p class="post-meta dim"><time datetime="2026-11-10">2026-11-10</time></p>
+        <p class="post-back"><a href="index.html">cd ..</a></p>
       </header>
 
       <p>This site is one HTML page per post, one stylesheet and a few small
@@ -56,20 +57,18 @@
       <blockquote>Type <code>help</code> in the terminal to see what else it does.</blockquote>
     </article>
 
-    <p class="post-foot"><a href="../index.html#log">cd ..</a></p>
-
     <hr>
     <p class="dim foot">no tracking, no cookies · <a href="#">rss</a></p>
   </main>
 
   <!-- Bio text for the terminal's `cat about.md`. The visible bio is on the home page. -->
   <div id="about" hidden>
-    <p>Software developer. Writes mostly Go, Python and Bash. Likes boring
+    <p>Software developer turned appsec engineer. Writes mostly Go, Python and Bash. Likes boring
     technology, small dependencies and things that still work in five years.</p>
   </div>
 
   <aside class="ro-col">
-    <section class="readout" aria-label="System status">
+    <section class="readout" id="shell" aria-label="System status">
       <p class="readout-host">dev@straya.local</p>
       <dl>
         <dt>id</dt><dd>matt</dd>
@@ -77,7 +76,7 @@
         <dt>loc</dt><dd>-27.47, 153.03</dd>
         <dt>time</dt><dd data-clock></dd>
         <dt>stack</dt><dd>go · python · typescript · bash</dd>
-        <dt>containers</dt><dd>❤️</dd>
+        <dt>containers</dt><dd>docker · podman · sandbox ❤️</dd>
         <dt>tasks</dt><dd>ai-wrangling · hardware-hacking · threat-research · malware-hunting · homelab</dd>
         <dt>build</dt><dd>2026-11-09</dd>
         <dt>mode</dt><dd data-mode></dd>

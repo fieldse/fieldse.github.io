@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About · dev@straya</title>
+<meta name="description" content="About Matt: appsec engineer, malware hunter.">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/readout.js" defer></script>
+<script src="../js/switcher.js" defer></script>
+<script src="../js/content.js" defer></script>
+<script src="../js/term-screen.js" defer></script>
+<script src="../js/term-fs.js" defer></script>
+<script src="../js/term-commands.js" defer></script>
+<script src="../js/term-editor.js" defer></script>
+<script src="../js/terminal.js" defer></script>
+</head>
+<body>
+<div class="wrap post-page">
+  <main class="main">
+    <nav>
+      <a href="../index.html">[0] home</a><a href="../projects/index.html">[1] projects</a><a href="../log/index.html">[2] log</a><a href="index.html" aria-current="page">[3] about</a><a href="#shell" class="nav-shell">&gt; shell</a>
+    </nav>
+
+    <section id="about">
+      <h2 id="about-page" class="sr-only">[3] About</h2>
+      <img class="portrait" src="../img/portrait.png" alt="Portrait" width="150">
+      <div class="about-tagline"><strong>Software engineer by day, malware hunter by night.</strong></div>
+      <p>Software developer turned appsec engineer. Writes mostly Go, Python and Bash. Likes boring
+      technology, small dependencies and things that still work in five years.</p>
+      <ul class="about-list">
+        <li><strong>Containerizing:</strong> I love containers, sandboxes, and layered security boundaries.</li>
+        <li><strong>Box-drawing:</strong> If I can't diagram it, I don't understand it.</li>
+        <li><strong>AI guardian:</strong> AI agents are our friends and loyal servants but they belong in sandboxes, not running free on your desktop.</li>
+        <li><strong>Dependency slayer:</strong> Ruthlessly minimizing dependency footprints wherever I find them.</li>
+        <li><strong>Malware hunting:</strong> Searching for malicious software in open-source ecosystems.</li>
+      </ul>
+      <p class="about-links"><a href="https://github.com/fieldse">github</a> · <a href="mailto:hello@mattfields.dev">email</a> · <a href="https://blacklight.security">work</a></p>
+    </section>
+
+    <p class="post-foot"><a href="../index.html">cd ..</a></p>
+
+    <hr>
+    <p class="dim foot">no tracking, no cookies · <a href="#">rss</a></p>
+  </main>
+
+  <aside class="ro-col">
+    <section class="readout" id="shell" aria-label="System status">
+      <p class="readout-host">dev@straya.local</p>
+      <dl>
+        <dt>id</dt><dd>matt</dd>
+        <dt>groups</dt><dd>security-engineer · developer · appsec</dd>
+        <dt>loc</dt><dd>-27.47, 153.03</dd>
+        <dt>time</dt><dd data-clock></dd>
+        <dt>stack</dt><dd>go · python · typescript · bash</dd>
+        <dt>containers</dt><dd>docker · podman · sandbox ❤️</dd>
+        <dt>tasks</dt><dd>ai-wrangling · hardware-hacking · threat-research · malware-hunting · homelab</dd>
+        <dt>build</dt><dd>2026-11-09</dd>
+        <dt>mode</dt><dd data-mode></dd>
+      </dl>
+    </section>
+  </aside>
+</div>
+
+<div class="sw" hidden>
+  <button class="sw-btn" type="button" aria-label="Accent color" aria-haspopup="true" aria-expanded="false"></button>
+  <div class="sw-menu" role="group" aria-label="Accent colors" hidden>
+    <button class="sw-opt" type="button" aria-label="Ice" data-accent="#6df3ff"></button>
+    <button class="sw-opt" type="button" aria-label="Cyan" data-accent="#00e5ff"></button>
+    <button class="sw-opt" type="button" aria-label="Teal" data-accent="#00f5c4"></button>
+    <button class="sw-opt" type="button" aria-label="Deep teal" data-accent="#00d4b4"></button>
+    <button class="sw-opt" type="button" aria-label="Yellow" data-accent="#e0af68"></button>
+    <button class="sw-opt" type="button" aria-label="Neon yellow" data-accent="#ffe600"></button>
+    <button class="sw-opt" type="button" aria-label="Gold" data-accent="#ffc933"></button>
+    <button class="sw-opt" type="button" aria-label="Yellow and cyan" data-accent="#ffe600" data-under="#00e5ff"></button>
+    <button class="sw-opt" type="button" aria-label="Cyan and yellow" data-accent="#00e5ff" data-under="#ffe600"></button>
+  </div>
+</div>
+</body>
+</html>

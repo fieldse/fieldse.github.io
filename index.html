@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>dev@straya</title>
+<title>mattfields.dev | devsec · appsec · fullstack</title>
 <link rel="stylesheet" href="css/style.css">
 <script src="js/readout.js" defer></script>
 <script src="js/switcher.js" defer></script>
@@ -18,17 +18,19 @@
 <div class="wrap">
   <main class="main">
     <nav>
-      <a href="#projects">[1] projects</a><a href="#log">[2] log</a><a href="#about">[3] about</a>
+      <a href="index.html" aria-current="page">[0] home</a><a href="projects/index.html">[1] projects</a><a href="log/index.html">[2] log</a><a href="about/index.html">[3] about</a><a href="#shell" class="nav-shell">&gt; shell</a>
     </nav>
 
-    <h2 id="projects">[1] Projects</h2>
-    <ul>
-      <li><a href="#">toolbox</a> <span class="dim">CLI helpers</span></li>
-      <li><a href="#">homelab</a> <span class="dim">notes and configs for my network</span></li>
-      <li><a href="#">scanner</a> <span class="dim">repo triage before cloning</span></li>
+    <h2 id="projects"><a href="projects/index.html">[1] Projects</a></h2>
+    <ul class="projects">
+      <li><a href="https://mattfields.dev/http2shell-checker/">http2shell-checker</a> <span class="dim">vuln checker for HTTP2Shell</span></li>
+      <li><a href="https://mattfields.dev/emudhra-ca-compromise-check/">emudhra-ca-check</a> <span class="dim">vuln checker for the eMudhra CA compromise</span></li>
+      <li><a href="https://github.com/fieldse/osm-tools">osm-cli</a> <span class="dim">CLI for the OpenSourceMalware API</span></li>
+      <li><a href="https://github.com/fieldse/fragcheck">fragcheck</a> <span class="dim">vuln checker for Linux kernel root bugs</span></li>
+      <li><a href="https://github.com/fieldse/osv-scanner">osv-scanner</a> <span class="dim">dependency vuln scan in a container</span></li>
     </ul>
 
-    <h2 id="log">[2] Log</h2>
+    <h2 id="log"><a href="log/index.html">[2] Log</a></h2>
     <ul>
       <li><span class="dim">2026-11-10</span><a href="log/plain-html.html">Building this site in plain HTML</a></li>
     </ul>
@@ -38,16 +40,15 @@
   </main>
 
   <aside class="side" id="about">
-    <h2>[0] About</h2>
     <img class="portrait" src="img/portrait.png" alt="Portrait" width="150">
     <h1>Matt</h1>
-    <p>Software developer. Writes mostly Go, Python and Bash. Likes boring
+    <p>Software developer turned appsec engineer. Writes mostly Go, Python and Bash. Likes boring
     technology, small dependencies and things that still work in five years.</p>
-    <p><a href="#">github</a> · <a href="mailto:hello@mattfields.dev">email</a></p>
+    <p><a href="https://github.com/fieldse">github</a> · <a href="mailto:hello@mattfields.dev">email</a> · <a href="https://blacklight.security">work</a></p>
   </aside>
 
   <aside class="ro-col">
-    <section class="readout" aria-label="System status">
+    <section class="readout" id="shell" aria-label="System status">
       <p class="readout-host">dev@straya.local</p>
       <dl>
         <dt>id</dt><dd>matt</dd>
@@ -55,7 +56,7 @@
         <dt>loc</dt><dd>-27.47, 153.03</dd>
         <dt>time</dt><dd data-clock></dd>
         <dt>stack</dt><dd>go · python · typescript · bash</dd>
-        <dt>containers</dt><dd>❤️</dd>
+        <dt>containers</dt><dd>docker · podman · sandbox ❤️</dd>
         <dt>tasks</dt><dd>ai-wrangling · hardware-hacking · threat-research · malware-hunting · homelab</dd>
         <dt>build</dt><dd>2026-11-09</dd>
         <dt>last log</dt><dd data-last></dd>

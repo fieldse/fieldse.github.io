@@ -1,4 +1,4 @@
-// The terminal's virtual filesystem and the ls and cat commands that read it.
+// The terminal's virtual filesystem, its current directory, and the ls, cat, cd and pwd commands.
 // The tree comes from content.js files, filled from the page's log and project lists.
 (function (Term) {
   var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -99,10 +99,21 @@
       return e;
     }
 
+    // One project file from a project list item: name from its link, text from its .dim description and link.
+    function projectEntry(n, ext) {
+      var a = n.querySelector("a");
+      var d = n.querySelector(".dim");
+      var e = entry(slugify(a ? a.textContent : "") + (ext || ""), false, buildDate(), 0);
+      e.desc = d ? d.textContent.trim() : "";
+      e.url = (a && a.getAttribute("href")) || "";
+      e.size = bytes(msg("catProject", { desc: e.desc, url: e.url }).join("\n"));
+      return e;
+    }
+
     // Entries of a folder filled from a page list.
     function fromPage(src) {
       return Array.prototype.map.call(document.querySelectorAll(src.list), function (n) {
-        return src.as === "folders" ? entry(slugify(n.textContent), true, buildDate()) : postEntry(n, src.ext);
+        return src.as === "projects" ? projectEntry(n, src.ext) : postEntry(n, src.ext);
       });
     }
 
@@ -115,12 +126,20 @@
       });
     }
 
-    // Resolves p one segment at a time, from home unless it starts with "/". ".." stops at "/".
+    // The current directory, as an absolute path. It lives for the page load only.
+    var cwd = HOME;
+
+    function segments(abs) { return abs.split("/").filter(Boolean); }
+
+    // Resolves p one segment at a time, from the cwd unless it starts with "/", "~" or "$HOME". ".." stops at "/".
     // Returns the path relative to home ("" is home itself), or an absolute path outside home.
     function norm(p) {
-      var segs = p.charAt(0) === "/" ? [] : HOME.split("/").slice(1);
       var parts = p.split("/");
-      if (parts[0] === "~") parts.shift();
+      var segs = segments(p.charAt(0) === "/" ? "" : cwd);
+      if (parts[0] === "~" || parts[0] === "$HOME") {
+        parts.shift();
+        segs = segments(HOME);
+      }
       parts.forEach(function (s) {
         if (s === "" || s === ".") return;
         if (s === "..") segs.pop();
@@ -129,6 +148,12 @@
       var full = "/" + segs.join("/");
       if (full === HOME) return "";
       return full.indexOf(HOME + "/") === 0 ? full.slice(HOME.length + 1) : full;
+    }
+
+    // A norm() path back to an absolute one.
+    function abs(path) {
+      if (path === "") return HOME;
+      return path.charAt(0) === "/" ? path : HOME + "/" + path;
     }
 
     // Entries in a directory, or null when the path is not a directory.
@@ -185,7 +210,7 @@
       if (list && !flags.a) entries = entries.filter(function (e) { return e.name.charAt(0) !== "."; });
       entries.sort(flags.t ? newestFirst : byName);
       if (flags.l) return longRows(entries, flags.h, !!list);
-      return entries.length ? [entries.map(label).join("  ")] : [];
+      return entries.length ? [{ words: entries.map(label) }] : [];
     }
 
     function cat(args) {
@@ -193,15 +218,55 @@
       if (!what) return msg("catUsage");
       if (C.secret.paths.indexOf(what) >= 0) return C.secret.lines.slice();
       var path = norm(what);
+      var sys = C.system.filter(function (f) { return f.path === abs(path); })[0];
+      if (sys) return what.charAt(what.length - 1) === "/" ? msg("catNotDir", { path: what }) : sys.lines.slice();
       var e = dirList(path) ? { dir: true } : find(path);
       if (!e) return msg("catMissing", { path: what });
       if (e.dir) return msg("catDir", { path: what });
       if (what.charAt(what.length - 1) === "/") return msg("catNotDir", { path: what });
       var f = homeFile(path);
       if (f) return [fileText(f)];
+      if (e.desc != null) {
+        return msg("catProject", { desc: e.desc, url: e.url }).map(function (s) {
+          var i = e.url ? s.indexOf(e.url) : -1;
+          return i < 0 ? s : { text: s.slice(0, i), link: e.url };
+        });
+      }
       return msg("catPost", { title: e.title, url: e.url });
     }
 
-    return { ls: ls, cat: cat };
+    // With no argument, cd goes home.
+    function cd(args) {
+      var what = args[0] || "~";
+      var path = norm(what);
+      if (dirList(path)) {
+        cwd = abs(path);
+        return [];
+      }
+      return msg(find(path) ? "cdNotDir" : "cdMissing", { path: what });
+    }
+
+    function pwd() { return [cwd]; }
+
+    // The cwd as the prompt shows it, with home as "~".
+    function where() {
+      if (cwd === HOME) return "~";
+      return cwd.indexOf(HOME + "/") === 0 ? "~" + cwd.slice(HOME.length) : cwd;
+    }
+
+    // Tab completions for a path word, relative to the cwd. Dot entries are never offered.
+    // Each completion is the whole word, and a folder ends in "/".
+    function complete(word, dirsOnly) {
+      if (word.charAt(0) === "-") return [];
+      var cut = word.lastIndexOf("/") + 1;
+      var dir = word.slice(0, cut);
+      var base = word.slice(cut);
+      var list = dirList(norm(dir || "."));
+      return (list || []).filter(function (e) {
+        return e.name.charAt(0) !== "." && e.name.indexOf(base) === 0 && (e.dir || !dirsOnly);
+      }).sort(byName).map(function (e) { return dir + label(e); });
+    }
+
+    return { ls: ls, cat: cat, cd: cd, pwd: pwd, where: where, complete: complete };
   };
 })(window.Term = window.Term || {});

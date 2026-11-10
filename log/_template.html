@@ -22,18 +22,21 @@
   2. Replace the title, description, date and body.
   3. Add a line to the top of the log list in index.html:
      <li><span class="dim">YYYY-MM-DD</span><a href="log/<slug>.html">POST TITLE</a></li>
+  4. Add the same line to the top of the list in log/index.html, linking to <slug>.html.
   The bio text, readout and color switcher below are copies of index.html. Keep them in sync.
 -->
 <div class="wrap post-page">
   <main class="main">
+    <!-- Posts mark [2] log as the current page. -->
     <nav>
-      <a href="../index.html">[~] home</a><a href="../index.html#projects">[1] projects</a><a href="../index.html#log">[2] log</a><a href="../index.html#about">[3] about</a>
+      <a href="../index.html">[0] home</a><a href="../projects/index.html">[1] projects</a><a href="index.html" aria-current="page">[2] log</a><a href="../about/index.html">[3] about</a><a href="#shell" class="nav-shell">&gt; shell</a>
     </nav>
 
     <article class="post">
       <header class="post-head">
         <h1>POST TITLE</h1>
         <p class="post-meta dim"><time datetime="YYYY-MM-DD">YYYY-MM-DD</time></p>
+        <p class="post-back"><a href="index.html">cd ..</a></p>
       </header>
 
       <p>Opening paragraph.</p>
@@ -45,20 +48,18 @@
 </code></pre>
     </article>
 
-    <p class="post-foot"><a href="../index.html#log">cd ..</a></p>
-
     <hr>
     <p class="dim foot">no tracking, no cookies · <a href="#">rss</a></p>
   </main>
 
   <!-- Bio text for the terminal's `cat about.md`. The visible bio is on the home page. -->
   <div id="about" hidden>
-    <p>Software developer. Writes mostly Go, Python and Bash. Likes boring
+    <p>Software developer turned appsec engineer. Writes mostly Go, Python and Bash. Likes boring
     technology, small dependencies and things that still work in five years.</p>
   </div>
 
   <aside class="ro-col">
-    <section class="readout" aria-label="System status">
+    <section class="readout" id="shell" aria-label="System status">
       <p class="readout-host">dev@straya.local</p>
       <dl>
         <dt>id</dt><dd>matt</dd>
@@ -66,7 +67,7 @@
         <dt>loc</dt><dd>-27.47, 153.03</dd>
         <dt>time</dt><dd data-clock></dd>
         <dt>stack</dt><dd>go · python · typescript · bash</dd>
-        <dt>containers</dt><dd>❤️</dd>
+        <dt>containers</dt><dd>docker · podman · sandbox ❤️</dd>
         <dt>tasks</dt><dd>ai-wrangling · hardware-hacking · threat-research · malware-hunting · homelab</dd>
         <dt>build</dt><dd>2026-11-09</dd>
         <dt>mode</dt><dd data-mode></dd>

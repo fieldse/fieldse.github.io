@@ -15,13 +15,16 @@
       return { name: b.getAttribute("aria-label").toLowerCase().replace(/ and /g, "-").replace(/\s+/g, "-"), btn: b };
     });
 
+    var env = Object.assign({}, C.env, { HOME: C.home, USER: C.user });
+
     var dateFmt = new Intl.DateTimeFormat("en-AU", { timeZone: "Australia/Brisbane", dateStyle: "full", timeStyle: "long" });
 
     var COMMANDS = {
       help: function () {
         return C.help.map(function (h) { return { label: h[0], value: h[1], dim: true }; });
       },
-      status: function () { return { lines: ctx.readout.rows(), live: true }; },
+      // Printed at boot pace, one character at a time.
+      status: function () { return { lines: ctx.readout.rows(), live: true, slow: true }; },
       whoami: function () { return [C.user]; },
       // Linux `id` format, short form, built from the readout's id line.
       id: function () {
@@ -29,7 +32,8 @@
         return ["uid=1000(" + user + ") gid=1000(" + user + ")"];
       },
       ls: ctx.fs.ls,
-      pwd: function () { return [C.home]; },
+      cd: ctx.fs.cd,
+      pwd: ctx.fs.pwd,
       cat: ctx.fs.cat,
       theme: function (args) {
         if (!args[0]) return msg("themeUsage").concat(themes.map(function (t) { return t.name; }).join(" · "));
@@ -43,7 +47,13 @@
         return ctx.history.list().map(function (h, i) { return ("    " + (i + 1)).slice(-5) + "  " + h; });
       },
       date: function () { return [dateFmt.format(new Date())]; },
-      echo: function (args, rest) { return [rest]; },
+      // Expands $NAME and ${NAME}. Unknown names expand to "", as in bash.
+      echo: function (args, rest) {
+        return [rest.replace(/\$(?:\{([A-Za-z_]\w*)\}|([A-Za-z_]\w*))/g, function (all, braced, bare) {
+          var name = braced || bare;
+          return own(env, name) ? env[name] : "";
+        })];
+      },
       clear: function () { screen.clear(); return []; },
       sudo: function () { return msg("sudo", { user: C.user }); },
       // Joke: every operand is refused. Flags are ignored. Left out of help, but Tab completes it.
@@ -80,7 +90,7 @@
         // Own-property lookup only, so names like "constructor" don't reach Object built-ins.
         var res = own(COMMANDS, name)
           ? await COMMANDS[name](words.slice(1), rest)
-          : msg("notFound", { cmd: name }).concat(COMMANDS.help());
+          : msg("notFound", { cmd: name });
         return Array.isArray(res) ? { lines: res, live: false } : res;
       },
 

@@ -24,6 +24,8 @@
     nmapLine: 400     // nmap, pause between lines
   });
   var BOOT_COMMAND = "status";
+  // Commands whose arguments Tab completes as paths. cd completes folders only.
+  var PATH_COMMANDS = ["cd", "ls", "cat", "rm"];
 
   // idle: cursor blinks before the auto-run. boot: the auto-run is printing. ready: the visitor's turn.
   var phase = "idle";
@@ -61,8 +63,13 @@
     }
   };
 
+  var fs = Term.createFs(C, readout, msg);
+
+  // The prompt shows the cwd, so it follows cd.
+  function promptText() { return host + ":" + fs.where() + "$ "; }
+
   var screen = Term.createScreen(box, {
-    prompt: host + ":~$ ",
+    prompt: promptText(),
     labels: { output: C.messages.outputLabel, input: C.messages.inputLabel, online: C.messages.online },
     timing: TIMING,
     // Post pages leave focus on the article.
@@ -70,7 +77,6 @@
   });
   var startedAt = Date.now();
   var history = Term.createHistory();
-  var fs = Term.createFs(C, readout, msg);
   var commands = Term.createCommands({
     content: C, screen: screen, fs: fs, readout: readout, history: history, msg: msg, timing: TIMING
   });
@@ -78,6 +84,9 @@
     screen: screen,
     history: history,
     names: commands.names,
+    paths: function (cmd, word) {
+      return PATH_COMMANDS.indexOf(cmd) < 0 ? [] : fs.complete(word, cmd === "cd");
+    },
     isBusy: function () { return busy; },
     submit: submit
   });
@@ -113,11 +122,13 @@
     try {
       if (text) {
         var res = await commands.run(text);
-        await screen.printFast(res.lines, res.live);
+        if (res.slow) await screen.printSlow(res.lines);
+        else await screen.printFast(res.lines, res.live);
       }
     } catch (e) {
       report(e);
     } finally {
+      screen.setPrompt(promptText());
       screen.showPrompt(true);
       busy = false;
       screen.scroll();
@@ -149,11 +160,24 @@
   });
 
   // A press interrupts only while busy. When nothing prints, a press only focuses, so output stays selectable.
-  screen.onPress(function () {
+  function press() {
     if (!busy) return false;
     interrupt();
     return true;
-  });
+  }
+  screen.onPress(press);
+
+  // The > shell nav link acts like a press on the terminal, then scrolls it into view and focuses the prompt.
+  // screen.focus() doesn't scroll, so the handler scrolls the terminal into view itself.
+  var shellLink = document.querySelector(".nav-shell");
+  if (shellLink) {
+    shellLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      press();
+      box.scrollIntoView({ block: "nearest" });
+      screen.focus();
+    });
+  }
 
   // Time on page: "MM:SS", with hours in front after the first hour.
   function elapsed() {
